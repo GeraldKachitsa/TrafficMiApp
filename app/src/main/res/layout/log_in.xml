@@ -19,25 +19,50 @@
             android:id="@+id/usernameholder"
             android:layout_below="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:endIconDrawable="@drawable/ic_clear"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/dim_grey"
+            app:startIconDrawable="@drawable/ic_account"
+            app:startIconTint="@color/dim_grey"
+            >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Username"/>
+                android:layout_height="50dp"
+                android:hint="Username"
+                android:textStyle="bold"
+                android:paddingLeft="20dp"
+
+
+
+                android:background="@drawable/edt_background"
+                android:layout_marginTop="20dp"/>
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
 
             android:id="@+id/passwordholder"
+            android:layout_width="384dp"
+            android:layout_height="66dp"
             android:layout_below="@+id/usernameholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:endIconDrawable="@drawable/ic_clear"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/dim_grey"
+            app:startIconDrawable="@drawable/ic_password_icon"
+            app:startIconTint="@color/dim_grey"
+            >
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/edt_background"
                 android:hint="Password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="19dp"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView

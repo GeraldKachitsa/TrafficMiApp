@@ -35,7 +35,7 @@ public class AnalyticsClass extends AppCompatActivity {
         offences = (TextView) findViewById(R.id.offences_id);
         accident_id = (TextView) findViewById(R.id.accident_id);
         vehicle_theft_id = (TextView) findViewById(R.id.vehicle_theft_id);
-        sample_id = (TextView) findViewById(R.id.sample_id);
+        //sample_id = (TextView) findViewById(R.id.sample_id);
         pieChart = findViewById(R.id.piechart);
 
         FirebaseDatabase.getInstance().getReference().addValueEventListener(new ValueEventListener() {

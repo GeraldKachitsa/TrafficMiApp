@@ -74,13 +74,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/sample_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/for_location"
-        android:gravity="center"
-        android:hint="locations" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -103,7 +96,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Offences Frequency"
+            android:text="Cases Frequency"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

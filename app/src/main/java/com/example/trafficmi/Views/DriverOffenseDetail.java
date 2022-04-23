@@ -45,6 +45,7 @@ public class DriverOffenseDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_offense_detail);
         dataValues = new ArrayList<DriversOffenceModel>();
+
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         recyclerView = findViewById(R.id.recycler_view);
         driverOffinceAdapter = new DriverOffinceAdapter(this, dataValues);
@@ -83,7 +84,7 @@ public class DriverOffenseDetail extends AppCompatActivity {
                             String vr=userData.get("driverName").toString();
                             Log.i("drivername",vr);
 
-                            dataValues.add(new DriversOffenceModel(userData.get("driverName").toString(),userData.get("driverOffenceDescription").toString(), userData.get("licenseNumber").toString(), userData.get("selectedSex").toString(), userData.get("lat").toString(), userData.get("longt").toString(), userData.get("address").toString()));
+                            dataValues.add(new DriversOffenceModel(userData.get("driverName").toString(),userData.get("driverOffenceDescription").toString(), userData.get("driverOffenceLocation").toString(), userData.get("longt").toString()));
 //                            dataValues.add(new DriversOffenceModel(userData.get("driverName").toString(),userData.get("driverOffenceDescription").toString(), userData.get("driverOffenceLocation").toString(), userData.get("licenseNumber").toString(), userData.get("selectedSex").toString(),userData.get("latitude").toString(),userData.get("longitude").toString()));
 
                         }catch (ClassCastException cce){

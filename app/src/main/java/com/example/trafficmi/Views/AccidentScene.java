@@ -155,8 +155,8 @@ public class AccidentScene extends AppCompatActivity {
             carColor.setErrorEnabled(true);
             carColor.setError("Color of a car cannot be empty");
         }
-        String makeOfCar = carMake.getEditText().getText().toString().trim();
-        if(makeOfCar.isEmpty()){
+        String scannedLicense = carMake.getEditText().getText().toString().trim();
+        if(scannedLicense.isEmpty()){
             carMake.setErrorEnabled(true);
             carMake.setError("Make of a car cannot be empty");
         }
@@ -178,7 +178,7 @@ public class AccidentScene extends AppCompatActivity {
 
             // Write to Database
 
-            UpdatedVehicleRecords updatedVehicleRecords = new UpdatedVehicleRecords(nameOfCar, makeOfCar, colorOfCar, vehicleRegistrationNumber,details);
+            UpdatedVehicleRecords updatedVehicleRecords = new UpdatedVehicleRecords(nameOfCar, scannedLicense, colorOfCar, vehicleRegistrationNumber,details);
             referenci.child(vehicleRegistrationNumber).setValue(updatedVehicleRecords);
             Toast.makeText(getApplicationContext(),
                     "Vehicle Records Successfully updated",
@@ -200,6 +200,7 @@ public class AccidentScene extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GET_LICENCE_NUMBER && resultCode == RESULT_OK){
             mLicenceNumber = data.getStringExtra("data");
+            carMake.getEditText().setText(mLicenceNumber);
             Toast.makeText(this, mLicenceNumber, Toast.LENGTH_SHORT).show();
         }
     }

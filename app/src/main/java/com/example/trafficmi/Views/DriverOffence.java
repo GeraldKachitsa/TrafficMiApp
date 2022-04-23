@@ -16,12 +16,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -44,9 +46,22 @@ import java.util.List;
 import java.util.Locale;
 
 public class DriverOffence extends AppCompatActivity {
+
+    //Progress bar
+    //    ProgressBar progressBar;
+    //    int count = 0;
+    //    Timer timer;
+    private ProgressBar progressBar;
+    private int i = 0;
+    private Handler hdlr = new Handler();
+    private TextView txtView;
+
+
+
+
     private TextInputEditText fullNameOfDriver;
 
-    EditText driverOffenceDescription;
+    EditText driverOffenceDescription, scannedLicenseNum, offenceLocation;
     private Button updateDriverRecordsBtn;
     RadioGroup offenceRadioGroup;
     RadioButton radioSexButton;
@@ -71,8 +86,16 @@ public class DriverOffence extends AppCompatActivity {
         setContentView(R.layout.driver_offence);
         fullNameOfDriver = (TextInputEditText) findViewById(R.id.driverName);
         driverOffenceDescription = (EditText) findViewById(R.id.otherOffenceDetails);
+        scannedLicenseNum= (EditText) findViewById(R.id.scannedLicenseNum);
+        offenceLocation= (EditText) findViewById(R.id.offenceLocation);
         driverOffenceToolBar = (Toolbar) findViewById(R.id.driverOffenceToolBar);
         TextView getLicenceNumber = findViewById(R.id.licenseNum);
+
+        //ProgressBar
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        txtView = (TextView) findViewById(R.id.tView);
+
 
 //        textView = findViewById(R.id.textView1);
         offenceRadioGroup = findViewById(R.id.offenceRadioGroup);
@@ -218,20 +241,60 @@ public class DriverOffence extends AppCompatActivity {
           driverOffenceDescription.setError("Offence description cannot be empty");
        }
 
+       String offencePlace = offenceLocation.getText().toString().trim();
 
-        else{
+       if (offencePlace.isEmpty()) {
+           // accidentDescription.setErrorEnabled(true);
+           offenceLocation.setError("Offence description cannot be empty");
+       }
+
+
+
+       else{
 //           Toast.makeText(this, lat, Toast.LENGTH_SHORT).show();
 
             //Writing to database
            com.example.trafficmi.DriverOffenceRecords driverOffenceRecords;
            if(licenceNumber != null){
-               driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(fullNameDriver, licenceNumber, offenceDescription, radioSexButton.getText().toString(), latitude, longitude, address);
+               driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(fullNameDriver, licenceNumber, offenceDescription, radioSexButton.getText().toString(), latitude, longitude, offencePlace );
 
            }else {
-               driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(fullNameDriver, offenceDescription, radioSexButton.getText().toString(), latitude, longitude, address);
+               driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(fullNameDriver, offenceDescription, radioSexButton.getText().toString(), latitude, longitude, offencePlace );
 
            }
            referenci.child(fullNameDriver).setValue(driverOffenceRecords);
+
+//           //ProgressBar
+//
+           progressBar.setVisibility(View.VISIBLE);
+
+           i = progressBar.getProgress();
+           new Thread(new Runnable() {
+               public void run() {
+                   while (i < 100) {
+                       i += 1;
+                       // Update the progress bar and display the current value in text view
+                       hdlr.post(new Runnable() {
+                           public void run() {
+                               progressBar.setProgress(i);
+                               txtView.setText(i+"/"+ progressBar.getMax());
+
+                           }
+                       });
+                       try {
+                           // Sleep for 100 milliseconds to show the progress slowly.
+                           Thread.sleep(50);
+                       } catch (InterruptedException e) {
+                           e.printStackTrace();
+                       }
+                   }
+                   progressBar.setVisibility(View.INVISIBLE);
+
+               }
+           }).start();
+
+
+
 
            Toast.makeText(this,
                     "Records Successfully updated",
@@ -261,6 +324,7 @@ public class DriverOffence extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GET_BARCODE_rESULTS && resultCode == RESULT_OK){
             licenceNumber = data.getStringExtra("data");
+            scannedLicenseNum.setText(licenceNumber );
             Toast.makeText(this, licenceNumber, Toast.LENGTH_SHORT).show();
         }
 

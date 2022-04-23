@@ -25,7 +25,7 @@ public class ViewVehicleTheftDetails extends AppCompatActivity {
         carRegnum.setText("Vehicle Registration Number:" + " " + " " + intent.getStringExtra("carRegnum"));
         nameOfCar.setText("Name of Car:" + " " + " " + intent.getStringExtra("nameOfCar"));
         colorOfCar.setText("color of Car:" + " " + " " + intent.getStringExtra("colorOfCar"));
-        yearOfMake.setText("Car Year of Make:" + " " + " " + intent.getStringExtra("yearOfMake"));
+        yearOfMake.setText("Licence Number:" + " " + " " + intent.getStringExtra("yearOfMake"));
         otherDetails.setText("Other Details:" + " " + " " + intent.getStringExtra("otherDetails"));
 
     }

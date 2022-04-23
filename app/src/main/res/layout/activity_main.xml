@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/dim_grey">
 <!--    <android.support.v7.widget.Toolbar-->
 <!--        android:id="@+id/my_toolbar"-->
 <!--        android:layout_width="match_parent"-->
@@ -50,7 +51,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="serif-monospace"
         android:text="RoTIRe"
-        android:textColor="@color/dim_grey"
+        android:textColor="@color/white"
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
