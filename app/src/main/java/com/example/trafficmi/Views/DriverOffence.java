@@ -140,7 +140,7 @@ public class DriverOffence extends AppCompatActivity {
                     longitude = String.valueOf(addresses.get(0).getLongitude());
                     address = String.valueOf(addresses.get(0).getAddressLine(0));
 
-                    Toast.makeText(DriverOffence.this, "Lat : "+latitude+"\nLong: "+longitude+"\nAdd :"+address, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(DriverOffence.this, "Lat : "+latitude+"\nLong: "+longitude+"\nAdd :"+address, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -206,7 +206,7 @@ public class DriverOffence extends AppCompatActivity {
        // get selected radio button from radioGroup
        int selectedId = offenceRadioGroup.getCheckedRadioButtonId();
 
-       Toast.makeText(this, selectedId+"", Toast.LENGTH_SHORT).show();
+       //Toast.makeText(this, selectedId+"", Toast.LENGTH_SHORT).show();
        // find the radiobutton by returned id
        radioSexButton = (RadioButton) findViewById(selectedId);
 
@@ -283,7 +283,7 @@ public class DriverOffence extends AppCompatActivity {
                        });
                        try {
                            // Sleep for 100 milliseconds to show the progress slowly.
-                           Thread.sleep(50);
+                           Thread.sleep(10);
                        } catch (InterruptedException e) {
                            e.printStackTrace();
                        }
@@ -325,7 +325,7 @@ public class DriverOffence extends AppCompatActivity {
         if(requestCode == GET_BARCODE_rESULTS && resultCode == RESULT_OK){
             licenceNumber = data.getStringExtra("data");
             scannedLicenseNum.setText(licenceNumber );
-            Toast.makeText(this, licenceNumber, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, licenceNumber, Toast.LENGTH_SHORT).show();
         }
 
     }

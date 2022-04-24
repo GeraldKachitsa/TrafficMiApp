@@ -2,8 +2,9 @@ package com.example.trafficmi.Model;
 
 public class ModelClass {
     String  carNameTheft,carOwnerTheft,sexTheft,carRegNumTheft,carYearOfMakeTheft,colorOfCarTheft,locationTheft,detailsOfTheft;
+    String vehicleTheftDescription;
 
-    public ModelClass(String carNameTheft, String carOwnerTheft, String sexTheft, String carRegNumTheft, String carYearOfMakeTheft, String colorOfCarTheft,String locationTheft, String detailsOfTheft) {
+    public ModelClass(String carNameTheft, String carOwnerTheft, String sexTheft, String carRegNumTheft, String carYearOfMakeTheft, String colorOfCarTheft, String locationTheft) {
         this.carNameTheft = carNameTheft;
         this.carOwnerTheft = carOwnerTheft;
         this.sexTheft = sexTheft;
@@ -11,7 +12,7 @@ public class ModelClass {
         this.carYearOfMakeTheft = carYearOfMakeTheft;
         this.colorOfCarTheft = colorOfCarTheft;
         this.locationTheft = locationTheft;
-        this.detailsOfTheft = detailsOfTheft;
+        this.vehicleTheftDescription = vehicleTheftDescription;
     }
 
     public String getCarNameTheft() {
@@ -80,4 +81,12 @@ public class ModelClass {
     }
 
 
+    public String getVehicleTheftDescription() {
+
+        return vehicleTheftDescription;
+    }
+
+    public void setVehicleTheftDescription(String vehicleTheftDescription) {
+        this.vehicleTheftDescription = vehicleTheftDescription;
+    }
 }

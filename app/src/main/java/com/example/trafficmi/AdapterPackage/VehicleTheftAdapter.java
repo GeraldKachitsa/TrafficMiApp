@@ -47,11 +47,11 @@ public class VehicleTheftAdapter extends RecyclerView.Adapter<VehicleTheftAdapte
                 intent.putExtra("carNameTheft", vehicleTheftReport.getCarNameTheft().toString());
                 intent.putExtra("carOwnerTheft", vehicleTheftReport.getCarOwnerTheft().toString());
                 intent.putExtra("sexOfOwner", vehicleTheftReport.getSexTheft().toString());
-                intent.putExtra(" carRegNumTheft", vehicleTheftReport.getCarRegNumTheft().toString());
+//                intent.putExtra(" carRegNumTheft", vehicleTheftReport.getCarRegNumTheft().toString());
                 intent.putExtra("carYearOfMakeTheft", vehicleTheftReport.getCarYearOfMakeTheft().toString());
                 intent.putExtra("colorOfCarTheft", vehicleTheftReport.getColorOfCarTheft().toString());
                 intent.putExtra("locationTheft", vehicleTheftReport.getLocationTheft().toString());
-                intent.putExtra(" detailsOfTheft", vehicleTheftReport.getDetailsOfTheft().toString());
+                intent.putExtra(" detailsOfTheft", vehicleTheftReport.getVehicleTheftDescription().toString());
                 appContext.startActivity(intent);
             }
         });

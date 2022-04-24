@@ -7,12 +7,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AccidentScene extends AppCompatActivity {
+
+
+    //Progress bar
+    //    ProgressBar progressBar;
+    //    int count = 0;
+    //    Timer timer;
+    private ProgressBar progressBar;
+    private int i = 0;
+    private Handler hdlr = new Handler();
+
     private static final int GET_LICENCE_NUMBER = 2000;
     private TextInputLayout vehicleRegNumber, carColor, carMake, carName;
     EditText otherDetails;
@@ -53,6 +65,11 @@ public class AccidentScene extends AppCompatActivity {
         //Tool bar
 
         accidentSceneToolBar = (Toolbar) findViewById(R.id.accidentSceneToolBar);
+
+
+        //ProgressBar
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         //accidentSceneToolBar.setTitle("VEHICLE THEFT");
         setSupportActionBar(accidentSceneToolBar);
@@ -147,7 +164,7 @@ public class AccidentScene extends AppCompatActivity {
 
         if (vehicleRegistrationNumber.isEmpty()) {
             vehicleRegNumber.setErrorEnabled(true);
-            vehicleRegNumber.setError("Name of a car cannot be empty");
+            vehicleRegNumber.setError(" cannot be empty");
         }
 
         String colorOfCar = carColor.getEditText().getText().toString().trim();
@@ -157,8 +174,8 @@ public class AccidentScene extends AppCompatActivity {
         }
         String scannedLicense = carMake.getEditText().getText().toString().trim();
         if(scannedLicense.isEmpty()){
-            carMake.setErrorEnabled(true);
-            carMake.setError("Make of a car cannot be empty");
+//            carMake.setErrorEnabled(true);
+//            carMake.setError("License Number cannot be empty");
         }
         String nameOfCar = carName.getEditText().getText().toString().trim();
         if(nameOfCar.isEmpty()){
@@ -180,8 +197,42 @@ public class AccidentScene extends AppCompatActivity {
 
             UpdatedVehicleRecords updatedVehicleRecords = new UpdatedVehicleRecords(nameOfCar, scannedLicense, colorOfCar, vehicleRegistrationNumber,details);
             referenci.child(vehicleRegistrationNumber).setValue(updatedVehicleRecords);
+
+
+            //ProgressBar
+//
+            progressBar.setVisibility(View.VISIBLE);
+
+            i = progressBar.getProgress();
+            new Thread(new Runnable() {
+                public void run() {
+                    while (i < 100) {
+                        i += 1;
+                        // Update the progress bar and display the current value in text view
+                        hdlr.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(i);
+                                //txtView.setText(i+"/"+ progressBar.getMax());
+
+                            }
+                        });
+                        try {
+                            // Sleep for 100 milliseconds to show the progress slowly.
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                }
+            }).start();
+
+
+
+
             Toast.makeText(getApplicationContext(),
-                    "Vehicle Records Successfully updated",
+                    "Records Successfully updated",
                     Toast.LENGTH_LONG)
                     .show();
             vehicleRegNumber.getEditText().setText("");
@@ -189,7 +240,7 @@ public class AccidentScene extends AppCompatActivity {
             carMake.getEditText().setText("");
             carName.getEditText().setText("");
             otherDetails.setText("");
-            startActivity(new Intent(this, AccidentView.class));
+            //startActivity(new Intent(this, AccidentView.class));
 
 
         }

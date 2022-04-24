@@ -82,7 +82,7 @@ public class ViewVehicleTheft extends AppCompatActivity {
                                 try{
                                     HashMap<String, Object> userData = (HashMap<String, Object>) data;
 
-                                            dataValues.add(new ModelClass(userData.get("carName").toString(), userData.get("carColor").toString(), userData.get("carMake").toString(), userData.get("vehicleRegNumber").toString(),userData.get("vehicleTheftDescription").toString(),userData.get("selectedSex").toString(), userData.get("vehicle_blue_book").toString(),userData.get("location").toString()));
+                                            dataValues.add(new ModelClass(userData.get("carName").toString(), userData.get("carColor").toString(), userData.get("carMake").toString(), userData.get("vehicleTheftDescription").toString(),userData.get("selectedSex").toString(), userData.get("vehicle_blue_book").toString(),userData.get("location").toString()));
 
                                 }catch (ClassCastException cce){
 

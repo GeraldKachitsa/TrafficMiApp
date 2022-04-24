@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -36,6 +38,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ReportVehicleTheft extends AppCompatActivity {
 
+
+
+    //Progress bar
+    //    ProgressBar progressBar;
+    //    int count = 0;
+    //    Timer timer;
+    private ProgressBar progressBar;
+    private int i = 0;
+    private Handler hdlr = new Handler();
+
     //toolBar
     Toolbar vehicleTheftToolBar;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -43,7 +55,7 @@ public class ReportVehicleTheft extends AppCompatActivity {
     TextInputEditText carName;
     TextInputEditText carMake;
     TextInputEditText carColor;
-    TextInputEditText vehicleRegNumber;
+   // TextInputEditText vehicleRegNumber;
     TextInputEditText vehicle_blue_book;
     EditText locationTheft;
     EditText vehicleTheftDescription;
@@ -67,12 +79,17 @@ public class ReportVehicleTheft extends AppCompatActivity {
         carName = (TextInputEditText) findViewById(R.id.car_name);
         carMake = (TextInputEditText) findViewById(R.id.car_make);
         carColor = (TextInputEditText) findViewById(R.id.car_color);
-        vehicleRegNumber = (TextInputEditText) findViewById(R.id.reg_num);
+        //vehicleRegNumber = (TextInputEditText) findViewById(R.id.reg_num);
         vehicle_blue_book = (TextInputEditText) findViewById(R.id.blue_book);
         vehicleTheftDescription = (EditText) findViewById(R.id.otherOffenceDetails);
         reportTheftBtn = (Button) findViewById(R.id.reportTheftBtn);
         locationTheft = findViewById(R.id.locationTheft);
         radioGroupSex = findViewById(R.id.radioGroupSex);
+
+
+        //ProgressBar
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
 
@@ -206,8 +223,8 @@ public class ReportVehicleTheft extends AppCompatActivity {
 
         }
 
-        String regNumberOfVehicle = vehicleRegNumber.getText().toString().trim();
-        if(regNumberOfVehicle.isEmpty()){
+        //String regNumberOfVehicle = vehicleRegNumber.getText().toString().trim();
+        if(makeOfCar.isEmpty()){
 
 //            vehicleRegNumber.setError("vehicle reg number cannot be empty");
         }else{
@@ -241,14 +258,48 @@ public class ReportVehicleTheft extends AppCompatActivity {
 
 //            carNameTheft,carOwnerTheft,sexTheft,carRegNumTheft,carYearOfMakeTheft,colorOfCarTheft,locationTheft,detailsOfTheft;
 
-            VehicleTheftReport vehicleTheftReport = new VehicleTheftReport( fullNameCar, makeOfCar, colorOfVehicle, regNumberOfVehicle, CarOwner, accidentDescription, selectedSex,location);
-            referenci.child(regNumberOfVehicle).setValue(vehicleTheftReport);
+            VehicleTheftReport vehicleTheftReport = new VehicleTheftReport( fullNameCar, makeOfCar, colorOfVehicle,CarOwner, accidentDescription, selectedSex,location);
+            referenci.child(fullNameCar).setValue(vehicleTheftReport);
+
+
+            //ProgressBar
+//
+            progressBar.setVisibility(View.VISIBLE);
+
+            i = progressBar.getProgress();
+            new Thread(new Runnable() {
+                public void run() {
+                    while (i < 100) {
+                        i += 1;
+                        // Update the progress bar and display the current value in text view
+                        hdlr.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(i);
+                                //txtView.setText(i+"/"+ progressBar.getMax());
+
+                            }
+                        });
+                        try {
+                            // Sleep for 100 milliseconds to show the progress slowly.
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                }
+            }).start();
+
+
+
+
             Toast.makeText(getApplicationContext(), "Reported Successfully...", Toast.LENGTH_LONG).show();
 
             carName.setText("");
             carMake.setText("");
             carColor.setText("");
-            vehicleRegNumber.setText("");
+           // vehicleRegNumber.setText("");
             vehicle_blue_book.setText("");
             vehicleTheftDescription.setText("");
 //            startActivity( new Intent(this, ViewVehicleTheft.class));

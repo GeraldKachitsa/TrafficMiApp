@@ -15,13 +15,16 @@
         android:layout_below="@+id/f_id"
         android:id="@+id/searchDriver_id"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="@color/dim_grey">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchDriver_field_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search vehicle (plate no.)" />
+            android:layout_height="50dp"
+            android:hint="Search vehicle (plate no.)"
+            android:background="@drawable/edt_background"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
