@@ -2,13 +2,10 @@ package com.example.trafficmi.AdapterPackage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +14,6 @@ import com.example.trafficmi.Model.AccidentSceneModel;
 import com.example.trafficmi.R;
 import com.example.trafficmi.Views.ViewVehicleTheftDetails;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AccidentAdapter extends RecyclerView.Adapter<AccidentAdapter.ViewHolder> {
@@ -74,9 +70,9 @@ public class AccidentAdapter extends RecyclerView.Adapter<AccidentAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            regnum = itemView.findViewById(R.id.car_color_id);
-            color = itemView.findViewById(R.id.car_reg_num_id);
-            name = itemView.findViewById(R.id.car_name_id);
+            regnum = itemView.findViewById(R.id.offence_name);
+            color = itemView.findViewById(R.id.location_name);
+            name = itemView.findViewById(R.id.driver_name);
 //            otherDetails2 = itemView.findViewById(R.id.otherDetails2);
         }
     }

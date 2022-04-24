@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.trafficmi.AdapterPackage.DriverOffinceAdapter;
+import com.example.trafficmi.DriverOffenceRecords;
 import com.example.trafficmi.Model.AccidentSceneModel;
 import com.example.trafficmi.Model.DriversOffenceModel;
 import com.example.trafficmi.R;
@@ -39,12 +40,12 @@ public class DriverOffenseDetail extends AppCompatActivity {
     DatabaseReference reference = root.getReference().child("DriverOffences");
 
     DriverOffinceAdapter driverOffinceAdapter;
-    ArrayList<DriversOffenceModel> dataValues;
+    ArrayList<DriverOffenceRecords> dataValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_offense_detail);
-        dataValues = new ArrayList<DriversOffenceModel>();
+        dataValues = new ArrayList<DriverOffenceRecords>();
 
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         recyclerView = findViewById(R.id.recycler_view);
@@ -84,7 +85,21 @@ public class DriverOffenseDetail extends AppCompatActivity {
                             String vr=userData.get("driverName").toString();
                             Log.i("drivername",vr);
 
-                            dataValues.add(new DriversOffenceModel(userData.get("driverName").toString(),userData.get("driverOffenceDescription").toString(), userData.get("driverOffenceLocation").toString(), userData.get("longt").toString()));
+//
+//                            driverName,
+//                                    licenseNumber,
+//                                    driverOffenceLocation,
+//                                    driverOffenceDescription,
+//                                    selectedSex,
+//                                    lat,longt;
+                            dataValues.add(new DriverOffenceRecords(
+                                    (String)userData.get("driverName"),
+                                    (String)userData.get("licenseNumber"),
+                                    (String)userData.get("driverOffenceLocation"),
+                                    (String)userData.get("driverOffenceDescription"),
+                                    (String)userData.get("selectedSex"),
+                                    (String)userData.get("lat"),
+                                    (String)userData.get("longt")));
 //                            dataValues.add(new DriversOffenceModel(userData.get("driverName").toString(),userData.get("driverOffenceDescription").toString(), userData.get("driverOffenceLocation").toString(), userData.get("licenseNumber").toString(), userData.get("selectedSex").toString(),userData.get("latitude").toString(),userData.get("longitude").toString()));
 
                         }catch (ClassCastException cce){
@@ -131,9 +146,9 @@ public class DriverOffenseDetail extends AppCompatActivity {
 
     private void filterd(String text) {
 
-        ArrayList<DriversOffenceModel> modelArrayListFiltered = new ArrayList<>();
-        for (DriversOffenceModel model: dataValues){
-            if (model.getLisenceNumber().toLowerCase().contains(text.toString().toLowerCase())){
+        ArrayList<DriverOffenceRecords> modelArrayListFiltered = new ArrayList<>();
+        for (DriverOffenceRecords model: dataValues){
+            if (model.getLicenseNumber().toLowerCase().contains(text.toString().toLowerCase())){
                 modelArrayListFiltered.add(model);
             }
         }

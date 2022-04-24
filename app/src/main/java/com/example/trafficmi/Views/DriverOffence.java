@@ -57,8 +57,6 @@ public class DriverOffence extends AppCompatActivity {
     private TextView txtView;
 
 
-
-
     private TextInputEditText fullNameOfDriver;
 
     EditText driverOffenceDescription, scannedLicenseNum, offenceLocation;
@@ -66,7 +64,6 @@ public class DriverOffence extends AppCompatActivity {
     RadioGroup offenceRadioGroup;
     RadioButton radioSexButton;
     String longitude, latitude, address, licenceNumber;
-
 
 
     //toolBar
@@ -79,17 +76,20 @@ public class DriverOffence extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private final int GET_BARCODE_rESULTS = 50;
 
+    TextView getLicenceNumber;
 
+
+    @SuppressLint("VisibleForTests")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_offence);
         fullNameOfDriver = (TextInputEditText) findViewById(R.id.driverName);
         driverOffenceDescription = (EditText) findViewById(R.id.otherOffenceDetails);
-        scannedLicenseNum= (EditText) findViewById(R.id.scannedLicenseNum);
-        offenceLocation= (EditText) findViewById(R.id.offenceLocation);
+        scannedLicenseNum = (EditText) findViewById(R.id.scannedLicenseNum);
+        offenceLocation = (EditText) findViewById(R.id.offenceLocation);
         driverOffenceToolBar = (Toolbar) findViewById(R.id.driverOffenceToolBar);
-        TextView getLicenceNumber = findViewById(R.id.licenseNum);
+        getLicenceNumber = findViewById(R.id.licenseNum);
 
         //ProgressBar
 
@@ -102,11 +102,22 @@ public class DriverOffence extends AppCompatActivity {
         // fused location initialization
         fusedLocationProviderClient = new FusedLocationProviderClient(this);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+        }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                latitude = location.getLatitude() + "";
+                longitude = location.getLongitude() + "";
+            }
+        });
+
         setSupportActionBar(driverOffenceToolBar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getLicenceNumber.setOnClickListener(v->{
+        getLicenceNumber.setOnClickListener(v -> {
             Intent i = new Intent(this, BarcodeScanner.class);
             startActivityForResult(i, GET_BARCODE_rESULTS);
         });
@@ -116,34 +127,8 @@ public class DriverOffence extends AppCompatActivity {
         updateDriverRecordsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (ActivityCompat.checkSelfPermission(DriverOffence.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    getLocation();
-                } else {
-                    ActivityCompat.requestPermissions(DriverOffence.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 50);
-                }
+                Toast.makeText(DriverOffence.this, "Lat :" + latitude + "\n Lon: " + longitude, Toast.LENGTH_SHORT).show();
                 driverOffenceRecords();
-            }
-        });
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getLocation() {
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-            Location location = task.getResult();
-
-            if (location != null) {
-                Geocoder geocoder = new Geocoder(DriverOffence.this, Locale.getDefault());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    latitude = String.valueOf(addresses.get(0).getLatitude());
-                    longitude = String.valueOf(addresses.get(0).getLongitude());
-                    address = String.valueOf(addresses.get(0).getAddressLine(0));
-
-                    //Toast.makeText(DriverOffence.this, "Lat : "+latitude+"\nLong: "+longitude+"\nAdd :"+address, Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
@@ -172,7 +157,7 @@ public class DriverOffence extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("Do you want to Exit?");
@@ -195,125 +180,121 @@ public class DriverOffence extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-   @Override
-  public boolean onSupportNavigateUp(){
-       onBackPressed();
-      return true;
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
-   public void driverOffenceRecords(){
-        //firebase Database
-       //radio buttons
-       // get selected radio button from radioGroup
-       int selectedId = offenceRadioGroup.getCheckedRadioButtonId();
 
-       //Toast.makeText(this, selectedId+"", Toast.LENGTH_SHORT).show();
-       // find the radiobutton by returned id
-       radioSexButton = (RadioButton) findViewById(selectedId);
+    public void driverOffenceRecords() {
+        int selectedId = offenceRadioGroup.getCheckedRadioButtonId();
+        radioSexButton = (RadioButton) findViewById(selectedId);
 
 
-     //  String selectedSex = radioSexButton.getText().toString();
+        root = FirebaseDatabase.getInstance();
+        referenci = root.getReference();
+        referenci = root.getReference("DriverOffences");
 
-      // Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+        String fullNameDriver = fullNameOfDriver.getText().toString();
+        String offenceDescription = driverOffenceDescription.getText().toString().trim();
+        String offencePlace = offenceLocation.getText().toString().trim();
 
-//
-//       if (selectedId == -1){
-//            radioSexButton.setError("Choose sex");
-//       }else{
-//          selectedSex = radioSexButton.getText().toString();
-//       }
+        if (fullNameDriver.isEmpty() || offenceDescription.isEmpty() || offencePlace.isEmpty()) {
+            Toast.makeText(this, "Input validation errors", Toast.LENGTH_SHORT).show();
+        } else {
+            com.example.trafficmi.DriverOffenceRecords driverOffenceRecords;
+            if (licenceNumber != null) {
+                if (latitude == null && longitude == null) {
+                    latitude = "";
+                    longitude = "";
+                }
+                driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(
+                        fullNameDriver,
+                        licenceNumber,
+                        offencePlace,
+                        offenceDescription,
+                        radioSexButton.getText().toString(),
+                        latitude,
+                        longitude);
 
-       root = FirebaseDatabase.getInstance();
-       referenci = root.getReference();
-        referenci = root.getReference(  "DriverOffences");
+            } else {
+                if (latitude == null && longitude == null) {
+                    latitude = "";
+                    longitude = "";
+                }
 
-        String fullNameDriver = fullNameOfDriver.getText().toString().trim();
-        if(fullNameDriver.isEmpty()){
-//           fullNameOfDriver.setError("Driver name cannot be empty");
-        }else{
-//            fullNameOfDriver.setError("");
+                driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(
+                        fullNameDriver,
+                        offencePlace,
+                        offenceDescription,
+                        radioSexButton.getText().toString(),
+                        latitude,
+                        longitude);
+            }
+            referenci.child(String.valueOf(System.currentTimeMillis())).setValue(driverOffenceRecords);
 
-        }
+            progressBar.setVisibility(View.VISIBLE);
 
-       String offenceDescription = driverOffenceDescription.getText().toString().trim();
+            i = progressBar.getProgress();
+            new Thread(new Runnable() {
+                public void run() {
+                    while (i < 100) {
+                        i += 1;
+                        // Update the progress bar and display the current value in text view
+                        hdlr.post(new Runnable() {
+                            public void run() {
+                                progressBar.setProgress(i);
+                                txtView.setText(i + "/" + progressBar.getMax());
 
-       if (offenceDescription.isEmpty()) {
-           // accidentDescription.setErrorEnabled(true);
-          driverOffenceDescription.setError("Offence description cannot be empty");
-       }
+                            }
+                        });
+                        try {
+                            // Sleep for 100 milliseconds to show the progress slowly.
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    progressBar.setVisibility(View.INVISIBLE);
 
-       String offencePlace = offenceLocation.getText().toString().trim();
-
-       if (offencePlace.isEmpty()) {
-           // accidentDescription.setErrorEnabled(true);
-           offenceLocation.setError("Offence description cannot be empty");
-       }
-
-
-
-       else{
-//           Toast.makeText(this, lat, Toast.LENGTH_SHORT).show();
-
-            //Writing to database
-           com.example.trafficmi.DriverOffenceRecords driverOffenceRecords;
-           if(licenceNumber != null){
-               driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(fullNameDriver, licenceNumber, offenceDescription, radioSexButton.getText().toString(), latitude, longitude, offencePlace );
-
-           }else {
-               driverOffenceRecords = new com.example.trafficmi.DriverOffenceRecords(fullNameDriver, offenceDescription, radioSexButton.getText().toString(), latitude, longitude, offencePlace );
-
-           }
-           referenci.child(fullNameDriver).setValue(driverOffenceRecords);
-
-//           //ProgressBar
-//
-           progressBar.setVisibility(View.VISIBLE);
-
-           i = progressBar.getProgress();
-           new Thread(new Runnable() {
-               public void run() {
-                   while (i < 100) {
-                       i += 1;
-                       // Update the progress bar and display the current value in text view
-                       hdlr.post(new Runnable() {
-                           public void run() {
-                               progressBar.setProgress(i);
-                               txtView.setText(i+"/"+ progressBar.getMax());
-
-                           }
-                       });
-                       try {
-                           // Sleep for 100 milliseconds to show the progress slowly.
-                           Thread.sleep(10);
-                       } catch (InterruptedException e) {
-                           e.printStackTrace();
-                       }
-                   }
-                   progressBar.setVisibility(View.INVISIBLE);
-
-               }
-           }).start();
+                }
+            }).start();
 
 
-
-
-           Toast.makeText(this,
+            Toast.makeText(this,
                     "Records Successfully updated",
                     Toast.LENGTH_LONG)
-                   .show();
+                    .show();
 
-           fullNameOfDriver.setText("");
+            fullNameOfDriver.setText("");
+            offenceLocation.setText("");
 
-           driverOffenceDescription.setText("");
-           //startActivity( new Intent(this, DriverOffenseDetail.class));
+            scannedLicenseNum.setText("");
+
+            driverOffenceDescription.setText("");
+            //startActivity( new Intent(this, DriverOffenseDetail.class));
 
         }
+
+
+        //Writing to database
+
+
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 50){
-            getLocation();
+        if (requestCode == 100) {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    latitude = location.getLatitude() + "";
+                    longitude = location.getLongitude() + "";
+                }
+            });
         }
 
     }
@@ -322,10 +303,10 @@ public class DriverOffence extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GET_BARCODE_rESULTS && resultCode == RESULT_OK){
+        if (requestCode == GET_BARCODE_rESULTS && resultCode == RESULT_OK) {
             licenceNumber = data.getStringExtra("data");
-            scannedLicenseNum.setText(licenceNumber );
-           // Toast.makeText(this, licenceNumber, Toast.LENGTH_SHORT).show();
+            scannedLicenseNum.setText(licenceNumber);
+            // Toast.makeText(this, licenceNumber, Toast.LENGTH_SHORT).show();
         }
 
     }

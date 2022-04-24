@@ -76,9 +76,9 @@ public class VehicleTheftAdapter extends RecyclerView.Adapter<VehicleTheftAdapte
         TextView car_color;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            carname = itemView.findViewById(R.id.car_name_id);
-            car_reg = itemView.findViewById(R.id.car_reg_num_id);
-            car_color = itemView.findViewById(R.id.car_color_id);
+            carname = itemView.findViewById(R.id.driver_name);
+            car_reg = itemView.findViewById(R.id.location_name);
+            car_color = itemView.findViewById(R.id.offence_name);
         }
     }
 }

@@ -11,18 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trafficmi.DriverOffenceData;
-import com.example.trafficmi.Model.AccidentSceneModel;
-import com.example.trafficmi.Model.DriversOffenceModel;
+import com.example.trafficmi.DriverOffenceRecords;
 import com.example.trafficmi.R;
-import com.example.trafficmi.Views.ViewVehicleTheftDetails;
 
 import java.util.ArrayList;
 
 public class DriverOffinceAdapter extends RecyclerView.Adapter<DriverOffinceAdapter.ViewHolder> {
-    ArrayList<DriversOffenceModel> data;
+    ArrayList<DriverOffenceRecords> data;
     Context context;
 
-    public DriverOffinceAdapter(Context context, ArrayList<DriversOffenceModel> data ) {
+    public DriverOffinceAdapter(Context context, ArrayList<DriverOffenceRecords> data ) {
         this.data = data;
         this.context = context;
     }
@@ -36,17 +34,19 @@ public class DriverOffinceAdapter extends RecyclerView.Adapter<DriverOffinceAdap
 
     @Override
     public void onBindViewHolder(@NonNull DriverOffinceAdapter.ViewHolder holder, int position) {
-        DriversOffenceModel driversOffenceModel= data.get(position);
-        holder.disPayName.setText(driversOffenceModel.getDisPayName().toString());
-        holder.lisenceNumber.setText(driversOffenceModel.getLisenceNumber().toString());
-
+        DriverOffenceRecords driversOffenceModel= data.get(position);
+        holder.disPayName.setText(driversOffenceModel.getDriverName());
+        holder.lisenceNumber.setText(driversOffenceModel.getDriverOffenceDescription());
+        holder.driverOffenceLocation.setText(driversOffenceModel.getDriverOffenceLocation());
+        holder.lon.setText("Long: "+driversOffenceModel.getLongt());
+        holder.lat.setText("Lat: "+driversOffenceModel.getLat());
         //getting driver offence data to cardView
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DriverOffenceData.class);
-                intent.putExtra("driverName", driversOffenceModel.getDisPayName().toString());
+                intent.putExtra("driverName", driversOffenceModel.getDriverName().toString());
                 intent.putExtra("driverSex", driversOffenceModel.getSelectedSex().toString());
                 //intent.putExtra("driverLicenseNumber", driversOffenceModel.getLisenceNumber().toString());
                 intent.putExtra("offenceDescription", driversOffenceModel.getDriverOffenceDescription().toString());
@@ -65,20 +65,22 @@ public class DriverOffinceAdapter extends RecyclerView.Adapter<DriverOffinceAdap
     public int getItemCount() {
         return data.size();
     }
-    public void filterList(ArrayList<DriversOffenceModel> models){
+    public void filterList(ArrayList<DriverOffenceRecords> models){
         data = models;
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView disPayName;
-        TextView driverOffenceLocation;
+        TextView driverOffenceLocation, lat, lon;
         TextView lisenceNumber;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            disPayName = itemView.findViewById(R.id.car_name_id);
-            driverOffenceLocation = itemView.findViewById(R.id.car_reg_num_id);
-            lisenceNumber = itemView.findViewById(R.id.car_color_id);
+            disPayName = itemView.findViewById(R.id.driver_name);
+            driverOffenceLocation = itemView.findViewById(R.id.location_name);
+            lisenceNumber = itemView.findViewById(R.id.offence_name);
+            lat = itemView.findViewById(R.id.tv_lat);
+            lon = itemView.findViewById(R.id.tv_long);
         }
     }
 }
