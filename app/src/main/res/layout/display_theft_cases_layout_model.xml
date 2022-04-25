@@ -32,21 +32,20 @@
 
             <TextView
                 android:textStyle="bold"
-                android:id="@+id/offence_name"
+                android:id="@+id/car_name"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Car color"
+
                 />
 
 
             <TextView
-                android:layout_below="@+id/offence_name"
+                android:layout_below="@+id/car_name"
                 android:textStyle="bold"
                 android:id="@+id/location_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="car name"
                 />
 
             <TextView
@@ -67,7 +66,7 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/driver_name"
+                android:id="@+id/year_of_make"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Car name"

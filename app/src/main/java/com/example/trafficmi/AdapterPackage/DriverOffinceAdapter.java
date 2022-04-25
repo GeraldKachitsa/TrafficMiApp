@@ -48,7 +48,7 @@ public class DriverOffinceAdapter extends RecyclerView.Adapter<DriverOffinceAdap
                 Intent intent = new Intent(context, DriverOffenceData.class);
                 intent.putExtra("driverName", driversOffenceModel.getDriverName().toString());
                 intent.putExtra("driverSex", driversOffenceModel.getSelectedSex().toString());
-                //intent.putExtra("driverLicenseNumber", driversOffenceModel.getLisenceNumber().toString());
+                intent.putExtra("driverLicenseNumber", driversOffenceModel.getLicenseNumber());
                 intent.putExtra("offenceDescription", driversOffenceModel.getDriverOffenceDescription().toString());
                 //intent.putExtra("driverLatitude", driversOffenceModel.getLat().toString());
                 intent.putExtra("driverLongitude", driversOffenceModel.getLongt().toString());
@@ -76,9 +76,9 @@ public class DriverOffinceAdapter extends RecyclerView.Adapter<DriverOffinceAdap
         TextView lisenceNumber;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            disPayName = itemView.findViewById(R.id.driver_name);
+            disPayName = itemView.findViewById(R.id.year_of_make);
             driverOffenceLocation = itemView.findViewById(R.id.location_name);
-            lisenceNumber = itemView.findViewById(R.id.offence_name);
+            lisenceNumber = itemView.findViewById(R.id.car_name);
             lat = itemView.findViewById(R.id.tv_lat);
             lon = itemView.findViewById(R.id.tv_long);
         }

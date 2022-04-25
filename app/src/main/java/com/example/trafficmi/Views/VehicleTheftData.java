@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.example.trafficmi.R;
 
+import static android.view.View.GONE;
+
 
 public class VehicleTheftData extends AppCompatActivity {
     TextView carNameTheft,carOwnerTheft,sexTheft,carRegNumTheft,carYearOfMakeTheft,colorOfCarTheft,locationTheft,detailsOfTheft ;
@@ -25,14 +27,20 @@ public class VehicleTheftData extends AppCompatActivity {
         locationTheft = findViewById(R.id.locationTheft);
         detailsOfTheft = findViewById(R.id.detailsOfTheft);
         Intent intent = getIntent();
+
+        String regNumber = intent.getStringExtra("regNumber");
         carNameTheft.setText("Car Name :" + " " + " " + intent.getStringExtra("carNameTheft"));
         carOwnerTheft.setText("Owner of Car :" + " " + " " + intent.getStringExtra("carOwnerTheft"));
         sexTheft.setText("Sex :" + " " + " " + intent.getStringExtra("sexOfOwner"));
-        carRegNumTheft.setText("Car Registration Number :" + " " + " " + intent.getStringExtra("carRegNumTheft"));
+        carRegNumTheft.setText("Car Registration Number :" + "  " + regNumber);
         carYearOfMakeTheft.setText("Car Year of Make :" + " " + " " + intent.getStringExtra("carYearOfMakeTheft"));
         colorOfCarTheft.setText("Colour of Car :" + " " + " " + intent.getStringExtra("colorOfCarTheft"));
         locationTheft.setText("Location:" + " " + " " + intent.getStringExtra("locationTheft"));
-        detailsOfTheft.setText("Vehicle Theft Details :" + " " + " " + intent.getStringExtra("detailsOfTheft"));
-
+        String d = intent.getStringExtra("detailsOfTheft");
+        if(d==null){
+            detailsOfTheft.setVisibility(GONE);
+        }else {
+            detailsOfTheft.setText("Vehicle Theft Details :" + " " + " " + intent.getStringExtra("detailsOfTheft"));
+        }
     }
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.trafficmi.AdapterPackage.VehicleTheftAdapter;
 import com.example.trafficmi.Model.ModelClass;
+import com.example.trafficmi.Model.VehicleTheftReport;
 import com.example.trafficmi.R;
 import com.example.trafficmi.ReportVehicleTheft;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,12 +42,12 @@ public class ViewVehicleTheft extends AppCompatActivity {
     DatabaseReference reference = root.getReference().child("VehicleTheftReport");
 
     VehicleTheftAdapter vehicleTheftAdapter;
-    ArrayList<ModelClass> dataValues;
+    ArrayList<VehicleTheftReport> dataValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_vehicle_theft);
-        dataValues = new ArrayList<ModelClass>();
+        dataValues = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view_id);
         vehicleTheftAdapter = new VehicleTheftAdapter(this, dataValues);
         recyclerView.setHasFixedSize(true);
@@ -81,8 +82,19 @@ public class ViewVehicleTheft extends AppCompatActivity {
 
                                 try{
                                     HashMap<String, Object> userData = (HashMap<String, Object>) data;
-
-                                            dataValues.add(new ModelClass(userData.get("carName").toString(), userData.get("carColor").toString(), userData.get("carMake").toString(), userData.get("vehicleTheftDescription").toString(),userData.get("selectedSex").toString(), userData.get("vehicle_blue_book").toString(),userData.get("location").toString()));
+                                    assert userData != null;
+                                    dataValues.add(new VehicleTheftReport(
+                                                    (String)userData.get("vehicleRegNumber"),
+                                                    (String)userData.get("carName"),
+                                                    (String)userData.get("carMake"),
+                                                    (String)userData.get("carColor"),
+                                                    (String)userData.get("vehicle_blue_book"),
+                                                    (String)userData.get("vehicleTheftDescription"),
+                                                    (String)userData.get("selectedSex"),
+                                                    (String)userData.get("location"),
+                                                    (String)userData.get("latitude"),
+                                                    (String)userData.get("longitude")
+                                            ));
 
                                 }catch (ClassCastException cce){
 
@@ -126,9 +138,9 @@ public class ViewVehicleTheft extends AppCompatActivity {
     }
 
     private void filteredVehicle(String text) {
-        ArrayList<ModelClass> modelArrayListFiltered = new ArrayList<>();
-        for (ModelClass model: dataValues){
-            if (model.getCarRegNumTheft().toLowerCase().contains(text.toString().toLowerCase())){
+        ArrayList<VehicleTheftReport> modelArrayListFiltered = new ArrayList<>();
+        for (VehicleTheftReport model: dataValues){
+            if (model.getVehicleRegNumber().toLowerCase().contains(text.toString().toLowerCase())){
                 modelArrayListFiltered.add(model);
             }
         }

@@ -39,7 +39,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ReportVehicleTheft extends AppCompatActivity {
 
 
-
     //Progress bar
     //    ProgressBar progressBar;
     //    int count = 0;
@@ -55,7 +54,7 @@ public class ReportVehicleTheft extends AppCompatActivity {
     TextInputEditText carName;
     TextInputEditText carMake;
     TextInputEditText carColor;
-   // TextInputEditText vehicleRegNumber;
+    // TextInputEditText vehicleRegNumber;
     TextInputEditText vehicle_blue_book;
     EditText locationTheft;
     EditText vehicleTheftDescription;
@@ -64,12 +63,15 @@ public class ReportVehicleTheft extends AppCompatActivity {
     RadioGroup radioGroupSex;
     RadioButton radioSexButton;
     RecyclerView recyclerView;
+    TextInputEditText edVehicleLicence;
+    String lat, lon;
 
 
     //FirebaseDatabase
     FirebaseDatabase root;
     DatabaseReference referenci;
 
+    @SuppressLint("VisibleForTests")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class ReportVehicleTheft extends AppCompatActivity {
         reportTheftBtn = (Button) findViewById(R.id.reportTheftBtn);
         locationTheft = findViewById(R.id.locationTheft);
         radioGroupSex = findViewById(R.id.radioGroupSex);
+        edVehicleLicence = findViewById(R.id.car_reg);
 
 
         //ProgressBar
@@ -92,35 +95,33 @@ public class ReportVehicleTheft extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
-
-
 //        searchBtn = findViewById(R.id.action_search);
         recyclerView = findViewById(R.id.recycler_view_id);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-        }else {
-              new FusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-
-            }
-        });
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+        } else {
+            new FusedLocationProviderClient(this).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        lat = location.getLatitude() + "";
+                        lon = location.getLongitude() + "";
+                    }
+                }
+            });
         }
-
-
 
 
         //Tool bar
 
         vehicleTheftToolBar = (Toolbar) findViewById(R.id.vehicleTheftToolBar);
 
-       //vehicleTheftToolBar.setTitle("VEHICLE THEFT");
+        //vehicleTheftToolBar.setTitle("VEHICLE THEFT");
         setSupportActionBar(vehicleTheftToolBar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         reportTheftBtn.setOnClickListener(v -> goToViewVehicleTheft());
-
 
 
     }
@@ -150,7 +151,7 @@ public class ReportVehicleTheft extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("Do you want to Exit?");
@@ -173,10 +174,12 @@ public class ReportVehicleTheft extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-    public boolean onSupportNavigateUp(){
+
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
     private void goToViewVehicleTheft() {
 
         //radio buttons
@@ -194,73 +197,34 @@ public class ReportVehicleTheft extends AppCompatActivity {
 
         root = FirebaseDatabase.getInstance();
         referenci = root.getReference();
-        referenci = root.getReference(  "VehicleTheftReport");
+        referenci = root.getReference("VehicleTheftReport");
 
 
         String fullNameCar = carName.getText().toString().trim();
-        if(fullNameCar.isEmpty()){
-
-//            carName.setError("Driver name cannot be empty");
-        }else{
-//            carName.setError("");
-
-        }
         String makeOfCar = carMake.getText().toString().trim();
-        if(makeOfCar.isEmpty()){
-
-//            carMake.setError("make cannot be empty");
-        }else{
-//            carMake.setError("");
-
-        }
-
         String colorOfVehicle = carColor.getText().toString().trim();
-        if(colorOfVehicle.isEmpty()){
-
-//            carColor.setError("color cannot be empty");
-        }else{
-//            carColor.setError("");
-
-        }
-
-        //String regNumberOfVehicle = vehicleRegNumber.getText().toString().trim();
-        if(makeOfCar.isEmpty()){
-
-//            vehicleRegNumber.setError("vehicle reg number cannot be empty");
-        }else{
-//            vehicleRegNumber.setError("");
-
-        }
-        String CarOwner =  vehicle_blue_book.getText().toString().trim();
-        if(CarOwner.isEmpty()){
-
-//            vehicle_blue_book .setError("blue book cannot be empty");
-        }
-
+        String regNumberOfVehicle = edVehicleLicence.getText().toString().trim();
+        String CarOwner = vehicle_blue_book.getText().toString().trim();
         String accidentDescription = vehicleTheftDescription.getText().toString().trim();
-
-        if (accidentDescription.isEmpty()) {
-            // accidentDescription.setErrorEnabled(true);
-            vehicleTheftDescription.setError("Name of a car cannot be empty");
-        }
-
-        String location =  locationTheft.getText().toString().trim();
-
-        if (location.isEmpty()) {
-            // accidentDescription.setErrorEnabled(true);
-//            locationTheft.setError("Name of a car cannot be empty");
-        }
-
-        else{
+        String location = locationTheft.getText().toString().trim();
 
 
-            //Writing to database
+        if (fullNameCar.isEmpty() || makeOfCar.isEmpty()
+                ||
+                colorOfVehicle.isEmpty() || regNumberOfVehicle.isEmpty()
+                || CarOwner.isEmpty() || accidentDescription.isEmpty() || location.isEmpty()
 
-//            carNameTheft,carOwnerTheft,sexTheft,carRegNumTheft,carYearOfMakeTheft,colorOfCarTheft,locationTheft,detailsOfTheft;
+        ) {
 
-            VehicleTheftReport vehicleTheftReport = new VehicleTheftReport( fullNameCar, makeOfCar, colorOfVehicle,CarOwner, accidentDescription, selectedSex,location);
-            referenci.child(fullNameCar).setValue(vehicleTheftReport);
+            Toast.makeText(this, "Input validation error", Toast.LENGTH_SHORT).show();
+        } else {
 
+            if(lat == null && lon == null){
+                lat = "";
+                lon = "";
+            }
+            VehicleTheftReport vehicleTheftReport = new VehicleTheftReport(regNumberOfVehicle, fullNameCar, makeOfCar, colorOfVehicle, CarOwner, accidentDescription, selectedSex, location, lat, lon);
+            referenci.child(String.valueOf(System.currentTimeMillis())).setValue(vehicleTheftReport);
 
             //ProgressBar
 //
@@ -292,22 +256,19 @@ public class ReportVehicleTheft extends AppCompatActivity {
             }).start();
 
 
-
-
             Toast.makeText(getApplicationContext(), "Reported Successfully...", Toast.LENGTH_LONG).show();
 
             carName.setText("");
             carMake.setText("");
             carColor.setText("");
-           // vehicleRegNumber.setText("");
+            edVehicleLicence.setText("");
             vehicle_blue_book.setText("");
             vehicleTheftDescription.setText("");
-//            startActivity( new Intent(this, ViewVehicleTheft.class));
 
-
-//            startActivity( new Intent(this,DriverOffenseDetail.class));
 
         }
+
+
     }
 
 

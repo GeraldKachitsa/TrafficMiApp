@@ -36,9 +36,12 @@ public class AccidentAdapter extends RecyclerView.Adapter<AccidentAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AccidentSceneModel accidentSceneModel = accidentSceneModels.get(position);
 
-        holder.name.setText(accidentSceneModel.getName().toString());
-        holder.regnum.setText(accidentSceneModel.getRegNum().toString());
-        holder.color.setText(accidentSceneModel.getColor().toString());
+        holder.name.setText(accidentSceneModel.getName());
+        holder.regnum.setText(accidentSceneModel.getRegNum());
+        holder.color.setText(accidentSceneModel.getColor());
+        holder.lat.setVisibility(View.GONE);
+        holder.lon.setVisibility(View.GONE);
+
 //        holder.otherDetails2.setText(accidentSceneModel.getOtherDetails().toString());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,13 +69,16 @@ public class AccidentAdapter extends RecyclerView.Adapter<AccidentAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView regnum,color,name;
+        TextView regnum,color,name, lat, lon;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            regnum = itemView.findViewById(R.id.offence_name);
+            regnum = itemView.findViewById(R.id.car_name);
             color = itemView.findViewById(R.id.location_name);
-            name = itemView.findViewById(R.id.driver_name);
+            name = itemView.findViewById(R.id.year_of_make);
+            lat = itemView.findViewById(R.id.tv_lat);
+            lon = itemView.findViewById(R.id.tv_long);
 //            otherDetails2 = itemView.findViewById(R.id.otherDetails2);
         }
     }

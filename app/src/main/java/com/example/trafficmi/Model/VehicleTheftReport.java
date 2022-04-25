@@ -1,11 +1,9 @@
 package com.example.trafficmi.Model;
 
-import com.google.android.material.textfield.TextInputLayout;
-
 public class VehicleTheftReport {
 
 
-    String  carName,
+    String carName,
             carMake,
             carColor,
             vehicleRegNumber,
@@ -19,11 +17,11 @@ public class VehicleTheftReport {
 
     }
 
-    public VehicleTheftReport(String carName, String carMake, String carColor, String vehicleRegNumber, String vehicle_blue_book, String vehicleTheftDescription, String selectedSex, String location, String latitude, String longitude) {
+    public VehicleTheftReport(String vehicleRegNumber, String carName, String carMake, String carColor, String vehicle_blue_book, String vehicleTheftDescription, String selectedSex, String location, String latitude, String longitude) {
+        this.vehicleRegNumber = vehicleRegNumber;
         this.carName = carName;
         this.carMake = carMake;
         this.carColor = carColor;
-        this.vehicleRegNumber = vehicleRegNumber;
         this.vehicle_blue_book = vehicle_blue_book;
         this.vehicleTheftDescription = vehicleTheftDescription;
         this.selectedSex = selectedSex;
@@ -32,29 +30,14 @@ public class VehicleTheftReport {
         this.longitude = longitude;
     }
 
-    public VehicleTheftReport(String  carName, String  carMake, String carColor, String vehicle_blue_book, String vehicleTheftDescription, String selectedSex, String location) {
 
-        this.carName = carName;
-        this.carMake = carMake;
-        this.carColor = carColor;
-        this.vehicle_blue_book = vehicle_blue_book;
-        this.vehicleTheftDescription = vehicleTheftDescription;
-        this.selectedSex = selectedSex;
-        this.location = location;
-
-    }
-
-
-
-    public VehicleTheftReport( String  carName, String carColor, String vehicleRegNumber,String vehicleTheftDescription, String selectedSex) {
+    public VehicleTheftReport(String carName, String carColor, String vehicleRegNumber, String vehicleTheftDescription, String selectedSex) {
         this.carName = carName;
         this.carColor = carColor;
         this.vehicleRegNumber = vehicleRegNumber;
         this.vehicleTheftDescription = vehicleTheftDescription;
         this.selectedSex = selectedSex;
     }
-
-
 
     public String getCarName() {
         return carName;
@@ -96,20 +79,12 @@ public class VehicleTheftReport {
         this.vehicle_blue_book = vehicle_blue_book;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getVehicleTheftDescription() {
         return vehicleTheftDescription;
     }
 
     public void setVehicleTheftDescription(String vehicleTheftDescription) {
-        this.vehicle_blue_book = vehicleTheftDescription;
+        this.vehicleTheftDescription = vehicleTheftDescription;
     }
 
     public String getSelectedSex() {
@@ -118,5 +93,29 @@ public class VehicleTheftReport {
 
     public void setSelectedSex(String selectedSex) {
         this.selectedSex = selectedSex;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }
